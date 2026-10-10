@@ -1,0 +1,59 @@
+syntax = "proto2";
+
+package com.google.android.turboadapter.poweranomalyservice.proto;
+
+option java_multiple_files = true;
+
+enum EntityType {
+    PWR_ENT_UNDEFINED = 0;
+    PWR_ENT_POWER_RAIL = 1;
+    PWR_ENT_SUBSYSTEM_RESIDENCY = 2;
+    PWR_ENT_KERNEL_SUSPEND = 3;
+    PWR_ENT_KERNEL_WAKE_REASON = 4;
+    PWR_ENT_CPU_TIME = 5;
+    PWR_ENT_KERNEL_WAKESOURCE = 6;
+    PWR_ENT_NATIVE_WAKELOCK = 7;
+    PWR_ENT_FRAMEWORK_WAKELOCK = 8;
+    PWR_ENT_COULOMB_COUNTER = 9;
+    PWR_ENT_NOTIFICATIONS = 10;
+    PWR_ENT_USAGE_SCALAR = 11;
+    PWR_ENT_USAGE_RESIDENCY = 12;
+    PWR_ENT_BLUETOOTH = 13;
+}
+
+message Id {
+    optional EntityType entity_type = 1;
+    optional string entity_name = 2;
+    optional int64 timestamp = 3;
+}
+
+message Scalar {
+    optional int64 value = 1;
+}
+
+message Residency {
+    optional string state_name = 1;
+    optional int64 duration = 2;
+    optional int64 count = 3;
+}
+
+message PowerData {
+    optional Scalar scalar = 1;
+    repeated Residency residency = 2;
+}
+
+message ResourceHolder {
+    optional int32 id = 1;
+    optional string name = 2;
+}
+
+message KeyedPowerData {
+    optional Id id = 1;
+    optional PowerData data = 2;
+    optional ResourceHolder resource_holder = 3;
+}
+
+message PowerDataResult {
+    optional int32 error_count = 1;
+    repeated KeyedPowerData power_data = 2;
+}
